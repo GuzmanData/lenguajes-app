@@ -14,6 +14,9 @@ export class CreateWordDto {
     category: string;
     img?: string;
     audio?: string;
+
+    @MinLength(1)
+    level: string;
 }
 
 

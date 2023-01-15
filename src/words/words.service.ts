@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
 import { Word } from './entities/word.entity';
@@ -41,12 +41,55 @@ export class WordsService {
     return this.wordModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} word`;
+ async findOne(term: string) {
+    
+    let word: Word;
+
+
+    // MongoID
+    if ( isValidObjectId( term ) ) {
+      word = await this.wordModel.findById( term );
+    }
+
+    // Word
+    if ( !word ) {
+
+
+      word = await this.wordModel.findOne({ word: { $regex: '.*' + term + '.*' } })
+    }
+
+
+    if ( !word ) 
+      throw new NotFoundException(`Word with id or word "${ term }" not found`);
+    
+
+    return word;
   }
 
-  update(id: number, updateWordDto: UpdateWordDto) {
-    return `This action updates a #${id} word`;
+
+  async update(id: string, updateWordDto: UpdateWordDto) {
+    const word = await this.wordModel.findById(id);
+
+    if(updateWordDto.word ) {
+      updateWordDto.word = updateWordDto.word.toLocaleLowerCase();
+    }
+
+    if(updateWordDto.wordSpanish ) {
+      updateWordDto.wordSpanish = updateWordDto.wordSpanish.toLocaleLowerCase();
+    }
+
+    if(updateWordDto.lenguajes ) {
+      updateWordDto.lenguajes = updateWordDto.lenguajes.toLocaleLowerCase();
+    }
+
+    
+    try {
+      await word.updateOne( updateWordDto );
+      return { ...word.toJSON(), ...updateWordDto };
+      
+    } catch (error) {
+      this.handleExceptions( error );
+    }
   }
 
   async remove(id: string) {

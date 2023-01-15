@@ -19,15 +19,17 @@ export class WordsController {
     return this.wordsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.wordsService.findOne(+id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.wordsService.findOne(term);
   }
 
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWordDto: UpdateWordDto) {
-    return this.wordsService.update(+id, updateWordDto);
+  update(@Param('id', ParseMongoIdPipe) id: string, @Body() updateWordDto: UpdateWordDto) {
+    return this.wordsService.update(id, updateWordDto);
   }
+
 
   @Delete(':id')
   remove(@Param('id', ParseMongoIdPipe) id: string) {

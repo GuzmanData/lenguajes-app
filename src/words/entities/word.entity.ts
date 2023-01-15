@@ -8,6 +8,7 @@ export class Word extends Document {
     @Prop({
     })
     word: string;
+    
     @Prop({
     })
     wordSpanish: string;
@@ -16,7 +17,6 @@ export class Word extends Document {
         index: true,
     })
     lenguajes: string;
-
 
     @Prop({
     })
@@ -30,8 +30,10 @@ export class Word extends Document {
     })
     audio?: string;
 
-
-
+    @Prop({
+    })
+    level: string;
+    
 }
 
 export const WordSchema = SchemaFactory.createForClass(Word);
