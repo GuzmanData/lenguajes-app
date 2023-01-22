@@ -3,12 +3,13 @@ import { Document } from 'mongoose';
 
 
 
-
+@Schema()
 export class Category extends Document {
 
     @Prop({
         unique: true,
         index: true,
+        validators: { unique: true }
     })
     category: string;
 

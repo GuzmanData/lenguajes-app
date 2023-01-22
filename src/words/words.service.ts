@@ -37,8 +37,8 @@ export class WordsService {
 
   }
 
-  findAll() {
-    return this.wordModel.find();
+  async findAll() {
+    return await  this.wordModel.find();
   }
 
  async findOne(term: string) {
