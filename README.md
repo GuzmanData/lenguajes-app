@@ -7,26 +7,32 @@
 1. Clonar el repositorio
 
 
-2. Ejecutar
-```
-yarn install
-```
-3. Tener Nest CLI instalado
-```
-npm i -g @nestjs/cli
-```
+2. crear el archivo constans:
 
-4. Levantar la base de datos
-```
-docker-compose up -d
-```
+  * urlDB = "url de la base de datos"
 
-5. Levantar la aplicacion de nest
-```
-yarn start:dev
-```
+
+
+
+3. Ejecutar
+  ```
+  docker container run \
+  --name bk-lenguajes-app \
+  -w /app \
+  -dp 3000:3000 \
+  -v "$(pwd)":/app \
+  node:lts-alpine3.17 \
+  sh -c "yarn install && yarn start:dev"
+  ```
+
+
 
 
 ## Stack usado
 * MongoDB
 * Nest
+
+
+## Url local:
+
+* http://localhost:3000/api/seed-words
